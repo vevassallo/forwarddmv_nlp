@@ -1,0 +1,1148 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forward DMV  -  NLP Intelligence Brief</title>
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root{
+    /* ForwardDMV-inspired palette (derived from logo) */
+    --navy:#18354F;
+    --red:#D72830;
+    --gold:#EBB043;
+
+    --bg:#F5F5F5;
+    --surface:#FAFAFA;
+    --surface2:#F2F2F2;
+    --border:#DDDDDD;
+
+    --text:#0F172A;
+    --muted:#475569;
+    --muted2:#64748B;
+    --bright:#0B1220;
+
+    /* Keep existing token names for compatibility with inline styles + JS */
+    --c1:var(--navy);
+    --c2:var(--red);
+    --c3:var(--gold);
+    --c4:#1F6B8F;     /* supporting blue */
+    --c5:#94A3B8;     /* cool gray */
+    --c6:#0F2A3D;     /* deep navy */
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    font-size:clamp(14px,0.84rem + 0.22vw,17px);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  /* Subtle page texture (lightweight, brand-safe) */
+  body::after{
+    content:'';
+    position:fixed;inset:0;
+    background:
+      radial-gradient(900px 380px at 12% -10%, rgba(215,40,48,.10), transparent 60%),
+      radial-gradient(900px 420px at 88% -12%, rgba(24,53,79,.12), transparent 62%),
+      radial-gradient(800px 380px at 50% 110%, rgba(235,176,67,.10), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .grid-bg{display:none;} /* previously neon grid */
+
+  a{color:var(--navy);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* HEADER */
+  header{
+    position:relative;z-index:1;
+    max-width:1200px;
+    margin:24px auto 0;
+    padding:34px 24px 28px;
+    border:1px solid var(--border);
+    border-radius:16px;
+    background:var(--surface);
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
+    overflow:hidden;
+  }
+  header::before{
+    content:'';
+    position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--navy),var(--red),var(--gold));
+  }
+  .header-inner{
+    max-width:1200px;margin:0 auto;
+    display:grid;gap:14px;
+  }
+  .brand{
+    display:flex;justify-content:center;
+  }
+  .brand-left{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+    width:100%;
+  }
+  .brand-meta{min-width:0;max-width:980px;}
+  .brand-logo{
+    height:clamp(64px,10vw,120px);
+    width:auto;
+    max-width:min(760px,92vw);
+    object-fit:contain;
+    flex-shrink:0;
+    opacity:.98;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(9px,0.5rem + 0.24vw,11px);
+    letter-spacing:clamp(1.3px,0.2vw,2.4px);
+    color:var(--muted2);
+    text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .pulse{
+    width:clamp(7px,0.36rem + 0.18vw,9px);
+    height:clamp(7px,0.36rem + 0.18vw,9px);
+    border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 0 4px rgba(215,40,48,.12);
+    animation:pk 2.2s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes pk{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
+
+  h1{
+    font-family:'Montserrat',sans-serif;
+    font-size:clamp(38px,5.4vw,72px);
+    line-height:1.02;
+    letter-spacing:-0.5px;
+    color:var(--bright);
+    margin-top:6px;
+    text-align:center;
+  }
+  h1 .accent{
+    background:linear-gradient(90deg,var(--navy),var(--red));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  .subtitle{
+    font-size:clamp(13px,0.74rem + 0.28vw,16px);
+    color:var(--muted);
+    max-width:860px;
+    line-height:1.75;
+    font-weight:400;
+    text-align:center;
+    margin:0 auto;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+  .chip{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:clamp(11px,0.64rem + 0.2vw,13px);
+    color:var(--muted);
+    font-weight:500;
+  }
+  .sources-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;}
+  .src-chip{
+    background:rgba(24,53,79,.06);
+    border:1px solid rgba(24,53,79,.14);
+    padding:6px 10px;
+    border-radius:10px;
+    font-size:clamp(11px,0.64rem + 0.2vw,13px);
+    color:var(--muted);
+  }
+
+  /* LAYOUT */
+  main{
+    position:relative;z-index:1;
+    max-width:1200px;
+    margin:0 auto;
+    padding:28px 24px 56px;
+    display:grid;
+    gap:20px;
+  }
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:clamp(18px,1.4vw,26px);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
+  }
+  .panel::before{
+    content:'';
+    position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--navy),var(--red),var(--gold));
+  }
+  .panel.t-orange::before{background:linear-gradient(90deg,var(--red),var(--gold));}
+  .panel.t-green::before{background:linear-gradient(90deg,var(--navy),var(--c4));}
+  .panel.t-purple::before{background:linear-gradient(90deg,var(--navy),var(--gold));}
+  .panel.t-pink::before{background:linear-gradient(90deg,var(--red),var(--navy));}
+
+  .slabel{
+    display:none;
+  }
+  .ptitle{
+    position:relative;
+    font-family:'Montserrat',sans-serif;
+    font-size:clamp(19px,1.04rem + 0.7vw,26px);
+    letter-spacing:-0.2px;
+    color:var(--bright);
+    margin-bottom:6px;
+    padding-left:14px;
+  }
+  .ptitle::before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:2px;
+    width:clamp(3px,0.2rem + 0.08vw,4px);
+    height:clamp(18px,0.9rem + 0.8vw,24px);
+    border-radius:2px;
+    background:var(--gold);
+  }
+  .pdesc{font-size:clamp(12px,0.7rem + 0.24vw,14px);color:var(--muted);line-height:1.72;margin-bottom:18px;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+  @media(max-width:900px){.two-col,.three-col{grid-template-columns:1fr;}}
+  @media(max-width:520px){header{padding:34px 16px 22px} main{padding:22px 16px 52px} .panel{padding:20px}}
+
+  /* STAT STRIP */
+  .stats-strip{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,240px));
+    justify-content:center;
+    gap:18px;
+    margin-bottom:10px;
+  }
+  @media(max-width:900px){.stats-strip{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;}}
+  @media(max-width:520px){.stats-strip{grid-template-columns:1fr;gap:14px;}}
+  .stat-box{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px 14px;
+    text-align:left;
+    box-shadow:0 10px 22px rgba(15,23,42,.05);
+  }
+  .stat-num{font-family:'Montserrat',sans-serif;font-size:clamp(28px,1.34rem + 1.4vw,36px);letter-spacing:-0.6px;line-height:1;margin-bottom:6px;}
+  .stat-lbl{font-size:clamp(10px,0.56rem + 0.2vw,12px);color:var(--muted2);letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+  .stat-sub{font-size:clamp(11px,0.64rem + 0.2vw,13px);color:var(--muted);margin-top:6px;line-height:1.45;}
+
+  /* TOPIC BARS */
+  .topic-row{display:grid;grid-template-columns:minmax(160px,240px) 1fr 56px;align-items:center;gap:12px;margin-bottom:12px;}
+  .topic-name{font-size:clamp(12px,0.66rem + 0.2vw,14px);font-weight:600;color:var(--bright);}
+  .bar-track{height:clamp(8px,0.42rem + 0.18vw,10px);background:rgba(15,23,42,.06);border-radius:999px;overflow:hidden;border:1px solid rgba(15,23,42,.06);}
+  .bar-fill{height:100%;border-radius:999px;width:0%;transition:width 1.6s cubic-bezier(.16,1,.3,1);}
+  .bar-val{font-family:'JetBrains Mono',monospace;font-size:clamp(11px,0.62rem + 0.2vw,13px);color:var(--muted2);text-align:right;}
+
+  /* TENSIONS */
+  .tension-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:700px){.tension-grid{grid-template-columns:1fr;}}
+  .tc{
+    padding:16px;border-radius:14px;border:1px solid;
+    background:rgba(255,255,255,.65);
+    transition:transform .2s ease, box-shadow .2s ease;
+    box-shadow:0 10px 18px rgba(15,23,42,.05);
+  }
+  .tc:hover{transform:translateY(-2px);box-shadow:0 14px 26px rgba(15,23,42,.08);}
+  .tvs{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .tside{
+    font-family:'Montserrat',sans-serif;
+    font-size:clamp(11px,0.62rem + 0.2vw,13px);
+    letter-spacing:.2px;
+    padding:6px 10px;
+    border-radius:10px;
+    font-weight:700;
+  }
+  .vsep{font-family:'JetBrains Mono',monospace;font-size:clamp(9px,0.5rem + 0.2vw,11px);color:var(--muted2);letter-spacing:2px;}
+  .tdesc{font-size:clamp(12px,0.7rem + 0.24vw,14px);color:var(--muted);line-height:1.68;}
+
+  /* TREEMAP */
+  #treemapWrap{
+    width:100%;
+    height:clamp(260px,52vw,520px);
+    min-height:260px;
+    position:relative;
+  }
+  .tm-cell{
+    position:absolute;border-radius:14px;overflow:hidden;cursor:pointer;
+    transition:filter .2s,transform .2s;
+    border:1px solid rgba(15,23,42,.10);
+    box-shadow:0 12px 22px rgba(15,23,42,.06);
+  }
+  .tm-cell:hover{filter:saturate(1.1) brightness(1.02);transform:scale(1.008);z-index:10;}
+  .tm-inner{width:100%;height:100%;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;}
+  .tm-label{font-family:'Montserrat',sans-serif;font-size:clamp(12px,1.3vw,18px);letter-spacing:-0.2px;color:rgba(255,255,255,.96);line-height:1.2;font-weight:700;}
+  .tm-val{font-family:'JetBrains Mono',monospace;font-size:clamp(10px,1.1vw,14px);color:rgba(255,255,255,.70);}
+  .tm-sub{font-size:clamp(9px,.9vw,12px);color:rgba(255,255,255,.75);line-height:1.4;margin-top:4px;}
+  .tm-section-label{position:absolute;top:-18px;left:0;font-family:'JetBrains Mono',monospace;font-size:clamp(8px,0.44rem + 0.2vw,10px);letter-spacing:clamp(1.2px,0.2vw,2px);text-transform:uppercase;color:var(--muted2);}
+
+  /* AI SENTIMENT SCALES */
+  .ai-sent-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  @media(max-width:900px){.ai-sent-grid{grid-template-columns:1fr;}}
+  .ai-dim{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:0 10px 22px rgba(15,23,42,.05);}
+  .ai-dim-title{font-family:'Montserrat',sans-serif;font-size:clamp(14px,0.78rem + 0.34vw,17px);color:var(--bright);margin-bottom:4px;font-weight:700;}
+  .ai-dim-sub{font-size:clamp(11px,0.64rem + 0.2vw,13px);color:var(--muted);margin-bottom:12px;line-height:1.55;}
+  .sector-row{display:grid;grid-template-columns:120px 1fr 40px;align-items:center;gap:10px;margin-bottom:10px;}
+  .sector-name{font-size:clamp(11px,0.62rem + 0.2vw,13px);font-weight:600;color:var(--bright);}
+  .sector-track{height:clamp(7px,0.38rem + 0.16vw,9px);background:rgba(15,23,42,.06);border-radius:999px;overflow:hidden;border:1px solid rgba(15,23,42,.06);}
+  .sector-fill{height:100%;border-radius:999px;width:0%;transition:width 1.5s cubic-bezier(.16,1,.3,1);}
+  .sector-val{font-family:'JetBrains Mono',monospace;font-size:clamp(10px,0.56rem + 0.2vw,12px);color:var(--muted2);text-align:right;}
+
+  /* CONCEPT WEB */
+  #webSvg{
+    width:100%;
+    height:auto;
+    aspect-ratio:790 / 370;
+    min-height:250px;
+    max-height:520px;
+    display:block;
+  }
+
+  /* BUBBLES */
+  .bubble-wrap{
+    position:relative;
+    width:100%;
+    height:clamp(280px,50vw,420px);
+    min-height:280px;
+  }
+  .bubble{
+    position:absolute;border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    cursor:pointer;text-align:center;line-height:1.2;
+    transition:transform .25s ease,box-shadow .25s ease;
+    box-shadow:0 12px 24px rgba(15,23,42,.06);
+    background:#fff;
+  }
+  .bubble:hover{transform:scale(1.10);z-index:20;box-shadow:0 16px 34px rgba(15,23,42,.10);}
+  .b-word{font-weight:800;}
+  .b-count{font-family:'JetBrains Mono',monospace;opacity:.7;}
+  .vis-legend{
+    margin-top:14px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 14px;
+    justify-content:center;
+  }
+  .vis-legend-item{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:clamp(10px,0.56rem + 0.2vw,12px);
+    color:var(--muted);
+  }
+  .vis-legend-dot{
+    width:clamp(8px,0.42rem + 0.14vw,10px);
+    height:clamp(8px,0.42rem + 0.14vw,10px);
+    border-radius:50%;
+    border:1px solid rgba(15,23,42,.16);
+    flex-shrink:0;
+  }
+
+  /* PAIN POINTS */
+  .pp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:700px){.pp-grid{grid-template-columns:1fr;}}
+  .pp-side{border-radius:14px;padding:18px;border:1px solid;box-shadow:0 10px 22px rgba(15,23,42,.05);background:var(--surface);}
+  .pp-title{font-family:'Montserrat',sans-serif;font-size:clamp(15px,0.82rem + 0.34vw,18px);letter-spacing:-0.2px;margin-bottom:14px;font-weight:800;line-height:1.3;}
+  .pp-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+  .pp-dot{
+    width:clamp(6px,0.34rem + 0.1vw,8px);
+    height:clamp(6px,0.34rem + 0.1vw,8px);
+    border-radius:50%;
+    flex-shrink:0;
+    margin-top:7px;
+  }
+  .pp-text{font-size:clamp(12px,0.7rem + 0.24vw,14px);line-height:1.62;color:var(--muted);}
+
+  /* METRO RANKINGS */
+  .metro-table{width:100%;border-collapse:collapse;font-size:clamp(13px,0.74rem + 0.24vw,15px);}
+  .metro-table th{
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(10px,0.56rem + 0.2vw,12px);letter-spacing:clamp(1.2px,0.2vw,2px);color:var(--muted2);
+    text-transform:uppercase;text-align:left;
+    padding:10px 8px;border-bottom:1px solid var(--border);
+  }
+  .metro-table td{padding:10px 8px;border-bottom:1px solid rgba(15,23,42,.06);color:var(--muted);}
+  .metro-table tr:hover td{background:rgba(24,53,79,.03);}
+  .rank-bad{color:var(--red);font-family:'JetBrains Mono',monospace;font-weight:800;}
+  .rank-mid{color:var(--navy);font-family:'JetBrains Mono',monospace;font-weight:700;}
+  @media(max-width:640px){
+    .topic-row{grid-template-columns:minmax(120px,1fr) 1fr 46px;gap:10px;}
+    .topic-name{font-size:12px;}
+    .sector-row{grid-template-columns:96px 1fr 34px;gap:8px;}
+    .sector-name{font-size:11px;}
+    .metro-table{font-size:13px;}
+    .metro-table th{font-size:10px;letter-spacing:1.2px;padding:8px 6px;}
+    .metro-table td{padding:8px 6px;}
+  }
+
+  /* QUOTES */
+  .quotes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;}
+  .q-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 10px 22px rgba(15,23,42,.05);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .q-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(15,23,42,.08);}
+  .q-mark{font-family:'Montserrat',sans-serif;font-size:clamp(34px,1.8rem + 1.5vw,52px);line-height:.5;color:var(--red);opacity:.18;margin-bottom:10px;font-weight:800;}
+  .q-text{font-size:clamp(12px,0.7rem + 0.24vw,14px);line-height:1.8;font-style:italic;color:var(--muted);margin-bottom:14px;}
+  .q-tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(9px,0.5rem + 0.2vw,11px);letter-spacing:clamp(1.1px,0.18vw,1.8px);
+    text-transform:uppercase;
+    color:var(--navy);
+    background:rgba(24,53,79,.06);
+    border:1px solid rgba(24,53,79,.12);
+    padding:5px 10px;
+    border-radius:999px;
+    display:inline-block;
+  }
+
+  /* INITIATIVES */
+  .init-card{
+    padding:22px;border-radius:16px;border:1px solid;
+    position:relative;overflow:hidden;
+    background:var(--surface);
+    box-shadow:0 10px 22px rgba(15,23,42,.05);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .init-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(15,23,42,.08);}
+  .init-num{font-family:'JetBrains Mono',monospace;font-size:clamp(40px,2.1rem + 1.5vw,56px);line-height:1;opacity:.08;position:absolute;bottom:-8px;right:12px;font-weight:800;}
+  .init-icon{font-size:clamp(21px,1rem + 0.8vw,30px);margin-bottom:10px;line-height:1;}
+  .init-title{font-family:'Montserrat',sans-serif;font-size:clamp(15px,0.82rem + 0.34vw,18px);letter-spacing:-0.2px;margin-bottom:8px;font-weight:800;}
+  .init-desc{font-size:clamp(12px,0.7rem + 0.24vw,14px);line-height:1.7;color:var(--muted);}
+
+  /* PARADOX CALLOUT */
+  .paradox-box{
+    background:linear-gradient(135deg, rgba(24,53,79,.06), rgba(235,176,67,.10));
+    border:1px solid rgba(235,176,67,.28);
+    border-radius:16px;
+    padding:18px 18px;
+    margin-top:18px;
+  }
+  .paradox-title{font-family:'Montserrat',sans-serif;font-size:clamp(15px,0.82rem + 0.34vw,18px);color:var(--navy);margin-bottom:8px;letter-spacing:-0.2px;font-weight:900;line-height:1.3;}
+  .paradox-text{font-size:clamp(12px,0.7rem + 0.24vw,14px);line-height:1.75;color:var(--muted);}
+
+  /* CTA */
+  .cta{
+    text-align:center;
+    padding:42px 24px;
+    background:linear-gradient(135deg, rgba(24,53,79,.08), rgba(215,40,48,.06));
+    border:1px solid rgba(24,53,79,.14);
+    border-radius:18px;
+    position:relative;overflow:hidden;
+    box-shadow:0 14px 34px rgba(15,23,42,.07);
+  }
+  .cta::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(700px 240px at 50% 0%, rgba(235,176,67,.18), transparent 60%);
+    pointer-events:none;
+  }
+  .cta-quote{
+    font-family:'Montserrat',sans-serif;
+    font-size:clamp(22px,3.6vw,44px);
+    letter-spacing:-0.3px;
+    color:var(--bright);
+    line-height:1.06;
+    margin-bottom:14px;
+    font-weight:900;
+  }
+
+  /* FADE-IN */
+  .fi{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease;}
+  .fi.on{opacity:1;transform:none;}
+
+  footer{
+    text-align:center;
+    padding:28px 18px;
+    border-top:1px solid var(--border);
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(9px,0.5rem + 0.2vw,11px);
+    color:var(--muted2);
+    letter-spacing:2px;
+    position:relative;z-index:1;
+    background:rgba(255,255,255,.65);
+  }
+
+  /* TOOLTIP */
+  #tooltip{
+    position:fixed;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:clamp(11px,0.64rem + 0.2vw,13px);
+    line-height:1.55;
+    max-width:240px;
+    pointer-events:none;
+    z-index:999;
+    opacity:0;
+    transition:opacity .12s;
+    box-shadow:0 16px 32px rgba(15,23,42,.10);
+    color:var(--muted);
+  }
+  #tooltip.show{opacity:1;}
+
+  @media(max-width:1024px){
+    header{padding:clamp(24px,3.2vw,34px) clamp(16px,2.8vw,24px) clamp(20px,2.6vw,28px);}
+    main{padding:clamp(20px,2.5vw,28px) clamp(16px,2.8vw,24px) clamp(40px,4.6vw,56px);}
+    .cta{padding:clamp(24px,4vw,42px) clamp(14px,2.8vw,24px);}
+  }
+  @media(max-width:520px){
+    .eyebrow{flex-wrap:wrap;row-gap:6px;}
+    .q-card,.init-card,.pp-side,.ai-dim,.stat-box{padding:14px;}
+    .paradox-box{padding:14px;}
+    .vis-legend{gap:8px 10px;}
+  }
+
+</style>
+</head>
+<body>
+<div id="tooltip"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-left">
+        <img class="brand-logo" src="forwarddmv logo.png" alt="ForwardDMV logo">
+        <div class="brand-meta">
+          <div class="eyebrow"><span class="pulse"></span>NLP INTELLIGENCE BRIEF | FORWARD DMV | FEB 17 2026</div>
+          <h1><span class="accent">AI</span> &amp; the Future of Work</h1>
+        </div>
+      </div>
+    </div>
+    <p class="subtitle">At ForwardDMV, more than 100 leaders across government, business, education, workforce development, and the nonprofit sector gathered to assess the region’s readiness for an AI-driven economy.  We analyzed speaker recordings and captured real-time sentiment from 95 participants. This brief consolidates the data, discussion, and live polling results into a clear assessment of the DMV’s path forward.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- STAT STRIP -->
+  <div class="stats-strip fi">
+    <div class="stat-box"><div class="stat-num" style="color:var(--red)">53.8K</div><div class="stat-lbl">Federal jobs lost</div><div class="stat-sub">Dec 2024–Dec 2025</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--navy)">888<span style="font-size:clamp(16px,0.92rem + 0.7vw,22px)">/949</span></div><div class="stat-lbl">DMV metro rank</div><div class="stat-sub">Regional Development 2025</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--gold)">1.4</div><div class="stat-lbl">Belief in AI job creation</div><div class="stat-sub">Will AI create more jobs than it replaces? (1–5)</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--red);font-size:clamp(22px,1.1rem + 1vw,30px)">Urgency</div><div class="stat-lbl">Most prevelant tone</div><div class="stat-sub">Among speakers and stakeholder feedback</div></div> 
+  </div>
+
+  <!-- TOPIC FREQUENCY -->
+  <div class="panel fi">    
+    <div class="ptitle">What the Room Talked About</div>
+    <div class="pdesc">The main topics participants focused on during the event. AI, workforce, and the regional economy dominated the conversation.</div>
+    <div id="topicBars"></div>
+  </div>
+
+  <!-- CENTRAL TENSIONS + METRO RANKINGS -->
+  <div class="two-col">
+    <div class="panel t-orange fi">      
+      <div class="ptitle">Central Tensions</div>
+      <div class="pdesc">The key areas where perspectives differed or tough trade-offs emerged. These are the structural debates shaping the region’s next steps.</div>
+      <div class="tension-grid">
+        <div class="tc" style="background:rgba(255,107,53,.06);border-color:rgba(255,107,53,.28);">
+          <div class="tvs"><div class="tside" style="background:rgba(255,107,53,.15);color:var(--c2)">AI Efficiency</div><div class="vsep">VS</div><div class="tside" style="background:rgba(16,185,129,.15);color:var(--c4)">Human Growth</div></div>
+          <div class="tdesc">Is removing friction from work always good  -  or is friction exactly where resilience and learning happen?</div>
+        </div>
+        <div class="tc" style="background:rgba(168,85,247,.06);border-color:rgba(168,85,247,.28);">
+          <div class="tvs"><div class="tside" style="background:rgba(88,28,135,.24);color:#270244">Credentials</div><div class="vsep" style="color:#1e293b;font-weight:800">VS</div><div class="tside" style="background:rgba(192, 94, 37, 0.24);color:#b45802">Demonstrated Skills</div></div>
+          <div class="tdesc">The critical skills pathway is eroding  -  yet AI is pushing HR back toward credential filtering due to application floods.</div>
+        </div>
+        <div class="tc" style="background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.28);">
+          <div class="tvs"><div class="tside" style="background:rgba(0,212,255,.15);color:var(--c1)">Regional Silos</div><div class="vsep">VS</div><div class="tside" style="background:rgba(236,72,153,.15);color:var(--c6)">Collective Action</div></div>
+          <div class="tdesc">The "Potomac Ocean"  -  the invisible jurisdictional barrier separating DC, MD, and VA  -  was named as the region's core vulnerability.</div>
+        </div>
+        <div class="tc" style="background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.28);">
+          <div class="tvs"><div class="tside" style="background:rgba(16,185,129,.15);color:var(--c4)">Fed Dependence</div><div class="vsep">VS</div><div class="tside" style="background:rgba(255,107,53,.15);color:var(--c2)">Diversification</div></div>
+          <div class="tdesc">53.8K federal jobs lost in 2025. Growing wealthy by passively accepting federal proximity is no longer a viable model.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel fi">      
+      <div class="ptitle">Regional Performance Reality</div>
+      <div class="pdesc">Recent data showing where the DMV stands economically. The numbers reflect real pressure on jobs and competitiveness. The region must shift from passive dependency to active economic development.</div>
+      <table class="metro-table">
+        <tr><th>Metro Division</th><th>Overall Rank</th><th>Workforce Rank</th><th>Economic Strength</th></tr>
+        <tr>
+          <td style="font-weight:500">Washington, D.C.–MD</td>
+          <td><span class="rank-bad">888</span><span style="color:var(--muted);font-size:clamp(10px,0.56rem + 0.2vw,12px)"> /949</span></td>
+          <td><span class="rank-bad">833</span></td>
+          <td><span class="rank-bad">845</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Arlington–Alexandria–Reston, VA–WV</td>
+          <td><span class="rank-mid">747</span><span style="color:var(--muted);font-size:clamp(10px,0.56rem + 0.2vw,12px)"> /949</span></td>
+          <td><span class="rank-bad">844</span></td>
+          <td><span class="rank-mid">530</span></td>
+        </tr>
+      </table>
+      <div style="margin-top:20px;padding:clamp(12px,1.4vw,16px);background:rgba(255,107,53,.07);border:1px solid rgba(255,107,53,.2);border-radius:8px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(8px,0.46rem + 0.2vw,10px);letter-spacing:clamp(1.2px,0.2vw,2px);color:var(--c2);margin-bottom:6px;">NET JOB CHANGE · DEC 2024–DEC 2025</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,1.4rem + 1.4vw,36px);color:var(--c2);line-height:1;">−55,900</div>
+        <div style="font-size:clamp(11px,0.64rem + 0.2vw,13px);color:var(--muted);margin-top:4px;">of which 53,800 were federal government jobs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TREEMAP SENTIMENT -->
+  <div class="panel t-purple fi">    <div class="ptitle">Discourse Tone</div>
+    <div class="pdesc">The overall emotional register of the conversation across the event. The percentages shown reflect how frequently each tone appeared, revealing how participants collectively framed the region’s challenges and opportunities.</div>
+    <div id="treemapWrap"></div>
+  </div>
+
+  <!-- AI SENTIMENT SCALES BY SECTOR -->
+  <div class="panel fi">    <div class="ptitle">AI Sentiment by Sector</div>
+    <div class="pdesc">Three sentiment dimensions measured across five professional sectors.<br>Scale: 1 = strongly pessimistic/disagree → 5 = strongly optimistic/agree.</div>
+    <div class="ai-sent-grid" id="aiSentGrid"></div>
+
+    <div class="paradox-box">
+      <div class="paradox-title">⚡ The Paradox of Optimism</div>
+      <div class="paradox-text">The most striking finding across all 95 respondents: professionals simultaneously believe AI will make the future "better" (avg. 3.4/5) <em>and</em> that it will replace more jobs than it creates (avg. 1.4/5). This isn't contradiction  -  it's a vision of a future that's more efficient and wealthier in aggregate, but structurally worse for the average worker. Workforce Development professionals, the very people tasked with placing talent, were the most pessimistic on job creation  -  a signal the region cannot ignore.</div>
+    </div>
+  </div>
+
+  <!-- BUBBLE CHART -->
+  <div class="panel fi">    <div class="ptitle">Key Concept Prominence</div>
+    <div class="pdesc">Bubble diameter scales to sentence-level mention count (shown inside). Color = thematic cluster.</div>
+    <div class="bubble-wrap" id="bubbles"></div>
+    <div class="vis-legend" aria-label="Key concept prominence legend">
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#18354F"></span>AI & Technology</div>
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#1F6B8F"></span>Workforce</div>
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#D72830"></span>Region & Economy</div>
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#EBB043"></span>Education & Pathways</div>
+    </div>
+  </div>
+
+  <!-- CONCEPT WEB -->
+  <div class="panel t-purple fi">    <div class="ptitle">How Key Concepts Connect</div>
+    <div class="pdesc">How the biggest ideas discussed are linked to each other. AI is directly tied to workforce, talent, education, and regional growth.</div>
+    <svg id="webSvg" viewBox="65 15 790 370" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="vis-legend" aria-label="Concept network legend">
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#18354F"></span>AI & Technology</div>
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#1F6B8F"></span>Workforce</div>
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#D72830"></span>Region & Economy</div>
+      <div class="vis-legend-item"><span class="vis-legend-dot" style="background:#EBB043"></span>Education & Pathways</div>
+    </div>
+  </div>
+
+  <!-- GIG PAIN POINTS -->
+  <div class="panel t-orange fi">    
+    <div class="ptitle">High-Skill Gig Work: Who's Blocked &amp; Why</div>
+    <div class="pdesc">The main obstacles facing displaced individuals and employers. Both sides face structural barriers that slow transition and hiring.</div>
+    <div class="pp-grid">
+      <div class="pp-side" style="background:rgba(0,212,255,.05);border-color:rgba(0,212,255,.25);">
+        <div class="pp-title" style="color:var(--navy)">👤 Solopreneurs</div>
+        <div id="individualPain"></div>
+      </div>
+      <div class="pp-side" style="background:rgba(255,107,53,.05);border-color:rgba(255,107,53,.25);">
+        <div class="pp-title" style="color:var(--red)">🏢 Employers</div>
+        <div id="employerPain"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHT QUOTES -->
+  <div class="panel t-green fi">    <div class="ptitle">Voices From the Room</div>
+    <div class="pdesc">Significant statements drawn directly from the live event transcript. Speakers anonymized.</div>
+    <div class="quotes-grid">
+      <div class="q-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          Nobody is coming to rescue you on AI. There is no consultant wave, no federal directive that is going to solve this for you. The technology explains itself in real time. You have to start experimenting.
+        </div>
+        <div class="q-tag">AI Adoption</div>
+      </div>
+      <div class="q-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          If AI makes every organization operate the same way, then no one has an advantage. The only defensible edge left is human creativity, judgment, and trust.
+        </div>
+        <div class="q-tag">Competitive Strategy</div>
+      </div>
+      <div class="q-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          We talk about tools. We train on tools. But we do not talk about identity. When someone cannot reconcile who they are professionally with working alongside AI, the training does not stick.
+        </div>
+        <div class="q-tag">Identity & Work</div>
+      </div>
+      <div class="q-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          Early childhood education is workforce development. Trauma prevention is workforce development. Family stability is workforce development. This is not a job training problem. It is a lifecycle problem.
+        </div>
+        <div class="q-tag">Education & Workforce Development</div>
+      </div>
+      <div class="q-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          We say we want skills-based hiring. But when thousands of AI-generated resumes hit the inbox, what do we do? We retreat back to credentials. We are moving backward.
+        </div>
+        <div class="q-tag">Hiring Paradox</div>
+      </div>
+      <div class="q-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          The Potomac is not a river. It is a wall. We operate like three separate regions pretending to be one. That fragmentation is our greatest vulnerability.
+        </div>
+        <div class="q-tag">Regional Coordination</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THREE INITIATIVES -->
+  <div class="fi">
+    <div class="slabel" style="margin-bottom:16px;border-left-color:var(--c4)">action agenda · 3 strategic initiatives</div>
+    <div class="ptitle">Strategic Initiatives</div>
+    <div class="pdesc">ForwardDMV's concrete actions launching to address the challenges discussed. Focused on talent transition, early-career pathways, and employer coordination.</div>
+    <div class="three-col">
+      <div class="init-card" style="background:rgba(0,212,255,.05);border-color:rgba(0,212,255,.25);">
+        <div class="init-icon">⚡</div>
+        <div class="init-title" style="color:var(--black)">Gig Economy Accelerator</div>
+        <div class="init-desc">Spring 2026. Short-term, project-based work for displaced federal experts  -  "solopreneurs" not gig drivers. Includes vetted platform, shared admin services (legal, tax, contracts), mentorship, and a "teaming exchange" connecting niche talent to prime contractors.</div>
+        <div class="init-num" style="color:var(--navy)">01</div>
+      </div>
+      <div class="init-card" style="background:rgba(168,85,247,.05);border-color:rgba(168,85,247,.25);">
+        <div class="init-icon">🎓</div>
+        <div class="init-title" style="color:var(--pink)">Scale Early-Career Pathways</div>
+        <div class="init-desc">April 16 2026. Regional one-day innovation lab expanding pre-apprenticeship and registered apprenticeship models across jurisdictions. Addresses the "benefits cliff" where wage gains can jeopardize Section 8/SNAP. Whole-person, trades-first model from age 12.</div>
+        <div class="init-num" style="color:var(--pink)">02</div>
+      </div>
+      <div class="init-card" style="background:rgba(16,185,129,.05);border-color:rgba(16,185,129,.25);">
+        <div class="init-icon">🛤️</div>
+        <div class="init-title" style="color:var(--black)">Regional Talent Pipeline</div>
+        <div class="init-desc">May 4 2026. DMV-wide employer-led pipeline using U.S. Chamber's TPM framework  -  shifting from "employer-informed" to "employer-led." Piloting in Life Sciences (AstraZeneca, Eli Lilly), leveraging NIH/FDA layoffs. Data flows across jurisdictional lines.</div>
+        <div class="init-num" style="color:var(--c4)">03</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta fi">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(9px,0.5rem + 0.2vw,11px);color:var(--c1);letter-spacing:clamp(1.4px,0.24vw,3px);margin-bottom:18px;">REGIONAL CALL TO ACTION</div>
+    <div class="cta-quote">DO WHAT YOU CAN<br>WITH WHAT YOU HAVE<br>WHERE YOU ARE</div>
+    <div style="font-size:clamp(11px,0.64rem + 0.2vw,13px);color:var(--muted);max-width:520px;margin:0 auto 24px;line-height:1.7;"> -  Teddy Roosevelt, invoked as the operating philosophy for a region that possesses every asset it needs: the most educated workforce in the country, world-class institutions, and now  -  the urgency to act together.</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(10px,0.56rem + 0.2vw,12px);color:var(--c1);">#ForwardDMV &nbsp;·&nbsp; forwarddmv.skipso.com</div>
+  </div>
+
+</main>
+
+<script>
+// ══ TOOLTIP HELPER ════════════════════════════════════
+const tip = document.getElementById('tooltip');
+function showTip(e, html) {
+  tip.innerHTML = html;
+  tip.classList.add('show');
+  moveTip(e);
+}
+function moveTip(e) {
+  const tipW = Math.min(tip.offsetWidth || 240, Math.max(120, window.innerWidth - 16));
+  const tipH = tip.offsetHeight || 110;
+  const x = Math.max(8, Math.min(e.clientX + 14, window.innerWidth - tipW - 8));
+  const y = Math.max(8, Math.min(e.clientY - 10, window.innerHeight - tipH - 8));
+  tip.style.left = x + 'px';
+  tip.style.top = y + 'px';
+}
+function hideTip() { tip.classList.remove('show'); }
+document.addEventListener('mousemove', moveTip);
+
+// ══ 1. TOPIC BARS ═══════════════════════════════════════════════
+const topics = [
+  {name:'AI & Future of Work',     val:238, color:'#18354F'},
+  {name:'Regional Economy',        val:218, color:'#D72830'},
+  {name:'Workforce Development',   val:206, color:'#1F6B8F'},
+  {name:'Apprenticeship & Pathways',val:63, color:'#EBB043'},
+  {name:'Education & Learning',    val:63,  color:'#64748B'},
+  {name:'Housing & Infrastructure', val:15, color:'#94A3B8'},
+];
+const maxV = 238;
+const topicEl = document.getElementById('topicBars');
+topics.forEach(t => {
+  const pct = (t.val/maxV*100).toFixed(1);
+  topicEl.innerHTML += `<div class="topic-row">
+    <div class="topic-name">${t.name}</div>
+    <div class="bar-track"><div class="bar-fill" data-pct="${pct}" style="background:linear-gradient(90deg,${t.color}bb,${t.color})"></div></div>
+    <div class="bar-val" style="color:${t.color}">${t.val}</div>
+  </div>`;
+});
+
+// ══ 2. TREEMAP  -  DISCOURSE TONE ONLY ════════════════════════════
+// Six tonal registers measured as prevalence across speaking segments (%).
+const toneData = [
+  {label:'Urgency',         val:41, sub:'Crisis + action language dominated',    color:'#D72830', dark:'#7a1b20'},
+  {label:'Action-Oriented',         val:34, sub:'Call-to-act framing throughout',    color:'#EBB043', dark:'#6a4a10'},
+  {label:'Collaborative',         val:29, sub:'Cross-sector partnership emphasis',    color:'#1F6B8F', dark:'#0b3a52'},
+  {label:'Critical / Sober',         val:24, sub:'Blunt economic data, no sugarcoating',    color:'#18354F', dark:'#0b1a28'},
+  {label:'Optimistic',         val:18, sub:'Cautious hope grounded in evidence',    color:'#2E6B3F', dark:'#0c2b18'},
+  {label:'Apprehensive',         val:14, sub:'AI disruption anxiety undercurrent',    color:'#64748B', dark:'#1f2937'},
+];
+
+function buildTreemap() {
+  const wrap = document.getElementById('treemapWrap');
+  wrap.innerHTML = '';
+  const W = wrap.offsetWidth || 1100;
+  const H = Math.max(260, Math.min(520, Math.round(W * 0.5)));
+  wrap.style.height = H + 'px';
+
+  const total = toneData.reduce((s,t) => s + t.val, 0);
+
+  // Simple row-based squarified: 3 on top, 3 on bottom
+  const top    = toneData.slice(0, 3);
+  const bottom = toneData.slice(3);
+  const topTotal    = top.reduce((s,t) => s + t.val, 0);
+  const bottomTotal = bottom.reduce((s,t) => s + t.val, 0);
+  const allTotal    = topTotal + bottomTotal;
+
+  const rowH1 = Math.round((topTotal / allTotal) * H);
+  const rowH2 = H - rowH1;
+
+  function renderRow(items, rowTotal, yOffset, rowHeight) {
+    let xOff = 0;
+    items.forEach((t, i) => {
+      const cellW = Math.round((t.val / rowTotal) * W);
+      const isLast = i === items.length - 1;
+      const actualW = isLast ? (W - xOff) : cellW;
+
+      const div = document.createElement('div');
+      div.className = 'tm-cell';
+      div.style.cssText = `left:${xOff}px;top:${yOffset}px;width:${actualW - 2}px;height:${rowHeight - 2}px;background:linear-gradient(135deg,${t.dark},${t.color}88);border-color:rgba(0,0,0,.4);`;
+
+      const segsOutOfTen = Math.round(t.val / 10);
+      div.innerHTML = `<div class="tm-inner" style="justify-content:space-between;">
+        <div>
+          <div class="tm-label" style="font-size:clamp(12px,1.6vw,20px)">${t.label}</div>
+          ${rowHeight > 70 ? `<div class="tm-sub" style="margin-top:4px;font-size:clamp(9px,1vw,12px);color:rgba(255,255,255,.5)">${t.sub}</div>` : ''}
+        </div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(15px,1.9vw,28px);color:rgba(255,255,255,.9);line-height:1;">${t.val}%</div>
+        </div>
+      </div>`;
+
+      div.addEventListener('mouseenter', e => showTip(e,
+        `<strong style="color:${t.color}">${t.label}</strong><br>
+         Appeared in <strong>${t.val}% of transcript segments</strong><br>
+         <strong>${segsOutOfTen} out of every 10</strong> speaking segments<br>
+         <span style="color:#6b7f90">${t.sub}</span>`
+      ));
+      div.addEventListener('mouseleave', hideTip);
+      wrap.appendChild(div);
+      xOff += actualW;
+    });
+  }
+
+  renderRow(top,    topTotal,    0,    rowH1);
+  renderRow(bottom, bottomTotal, rowH1, rowH2);
+}
+buildTreemap();
+
+// ══ 3. AI SENTIMENT BY SECTOR ════════════════════════════════════
+const sectorData = {
+  dimensions: [
+    { title:'Future Betterment', sub:'Will AI make the future better for most?', scale:'1–5', color:'#1F6B8F', max:5,
+      sectors:[
+        {name:'Non-profit',    val:4.1, color:'#34d399'},
+        {name:'Education',     val:3.7, color:'#6ee7b7'},
+        {name:'Business',      val:3.5, color:'#a7f3d0'},
+        {name:'Workforce Dev', val:3.0, color:'#EBB043'},
+        {name:'Government',    val:2.9, color:'#D72830'},
+      ]
+    },
+    { title:'Daily Life Comfort', sub:'Comfort with AI in everyday life?', scale:'1–5', color:'#18354F', max:5,
+      sectors:[
+        {name:'Non-profit',    val:3.9, color:'#38bdf8'},
+        {name:'Business',      val:3.8, color:'#7dd3fc'},
+        {name:'Workforce Dev', val:3.4, color:'#bae6fd'},
+        {name:'Education',     val:3.3, color:'#e0f2fe'},
+        {name:'Government',    val:3.1, color:'#EBB043'},
+      ]
+    },
+    { title:'Job Creation Belief', sub:'Will AI create more jobs than it replaces?', scale:'1–5', color:'#D72830', max:5,
+      sectors:[
+        {name:'Workforce Dev', val:1.1, color:'#ef4444'},
+        {name:'Government',    val:1.2, color:'#f87171'},
+        {name:'Education',     val:1.3, color:'#fca5a5'},
+        {name:'Business',      val:1.8, color:'#fcd34d'},
+        {name:'Non-profit',    val:2.0, color:'#fde68a'},
+      ]
+    }
+  ]
+};
+
+function readableValueColor(hex) {
+  const h = (hex || '').replace('#', '');
+  if (h.length !== 6) return hex;
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  const luma = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+
+  // Keep hue identity but darken more for very light tones.
+  let factor = 0.86;         // default slight darken
+  if (luma > 0.75) factor = 0.62;
+  else if (luma > 0.62) factor = 0.72;
+  else if (luma > 0.50) factor = 0.80;
+
+  const dr = Math.max(0, Math.min(255, Math.round(r * factor)));
+  const dg = Math.max(0, Math.min(255, Math.round(g * factor)));
+  const db = Math.max(0, Math.min(255, Math.round(b * factor)));
+  return `rgb(${dr}, ${dg}, ${db})`;
+}
+
+const grid = document.getElementById('aiSentGrid');
+sectorData.dimensions.forEach(dim => {
+  const div = document.createElement('div');
+  div.className = 'ai-dim';
+  let rows = dim.sectors.map(s => {
+    const pct = (s.val/dim.max*100).toFixed(0);
+    const noteHtml = s.note ? `<span style="font-size:clamp(8px,0.44rem + 0.2vw,10px);color:var(--c5);margin-left:4px">${s.note}</span>` : '';
+    return `<div class="sector-row">
+      <div class="sector-name">${s.name}${noteHtml}</div>
+      <div class="sector-track"><div class="sector-fill" data-pct="${pct}" style="background:${s.color}cc"></div></div>
+      <div class="sector-val" style="color:${readableValueColor(s.color)};font-weight:700">${s.val}</div>
+    </div>`;
+  }).join('');
+  div.innerHTML = `<div class="ai-dim-title" style="color:${dim.color}">${dim.title}</div>
+    <div class="ai-dim-sub">${dim.sub} <span style="color:${dim.color};font-size:clamp(9px,0.5rem + 0.2vw,11px)">(Scale ${dim.scale})</span></div>
+    ${rows}`;
+  grid.appendChild(div);
+});
+
+// ══ 4. CONCEPT WEB ════════════════════════════════════════════════
+const nodes = [
+  {id:'AI',            freq:184, x:460, y:210, color:'#18354F', cluster:0},
+  {id:'workforce',     freq:47,  x:272, y:122, color:'#1F6B8F', cluster:1},
+  {id:'region',        freq:79,  x:636, y:108, color:'#D72830', cluster:2},
+  {id:'skills',        freq:25,  x:170, y:252, color:'#1F6B8F', cluster:1},
+  {id:'career',        freq:39,  x:308, y:325, color:'#1F6B8F', cluster:1},
+  {id:'employers',     freq:28,  x:584, y:306, color:'#1F6B8F', cluster:1},
+  {id:'talent',        freq:30,  x:722, y:210, color:'#D72830', cluster:2},
+  {id:'education',     freq:25,  x:156, y:152, color:'#EBB043', cluster:3},
+  {id:'federal',       freq:29,  x:738, y:322, color:'#1F6B8F', cluster:1},
+  {id:'data',          freq:32,  x:520, y:358, color:'#18354F', cluster:0},
+  {id:'growth',        freq:21,  x:676, y:148, color:'#D72830', cluster:2},
+  {id:'apprenticeship',freq:18,  x:198, y:340, color:'#EBB043', cluster:3},
+  {id:'innovation',    freq:14,  x:404, y:62,  color:'#EBB043', cluster:3},
+  {id:'jobs',          freq:21,  x:384, y:355, color:'#1F6B8F', cluster:1},
+];
+
+// Slightly increase spacing between concept nodes while preserving layout shape.
+const webCenter = { x: 460, y: 210 };
+const nodeSpread = 1.05;
+nodes.forEach(n => {
+  if (n.id === 'AI') return;
+  n.x = Math.round(webCenter.x + (n.x - webCenter.x) * nodeSpread);
+  n.y = Math.round(webCenter.y + (n.y - webCenter.y) * nodeSpread);
+});
+
+const edges = [
+  {s:'AI',t:'workforce',w:13},{s:'AI',t:'region',w:12},{s:'AI',t:'skills',w:11},
+  {s:'career',t:'education',w:11},{s:'region',t:'workforce',w:10},{s:'region',t:'talent',w:9},
+  {s:'AI',t:'employers',w:8},{s:'AI',t:'talent',w:7},{s:'AI',t:'data',w:6},
+  {s:'AI',t:'career',w:6},{s:'AI',t:'growth',w:6},{s:'region',t:'federal',w:5},
+  {s:'region',t:'growth',w:5},{s:'education',t:'workforce',w:4},{s:'talent',t:'workforce',w:4},
+  {s:'career',t:'apprenticeship',w:4},{s:'innovation',t:'region',w:4},
+  {s:'jobs',t:'federal',w:3},{s:'skills',t:'employers',w:3},{s:'data',t:'region',w:3},
+];
+
+const svg = document.getElementById('webSvg');
+edges.forEach(e => {
+  const sn=nodes.find(n=>n.id===e.s), tn=nodes.find(n=>n.id===e.t);
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  ['x1','y1','x2','y2'].forEach((a,i)=>line.setAttribute(a,[sn.x,sn.y,tn.x,tn.y][i]));
+  line.setAttribute('stroke',sn.color);
+  line.setAttribute('stroke-opacity',(0.09+e.w*0.038).toFixed(2));
+  line.setAttribute('stroke-width',(0.5+e.w*0.52).toFixed(1));
+  line.dataset.s=e.s; line.dataset.t=e.t;
+  line.dataset.bo=(0.09+e.w*0.038).toFixed(2);
+  line.dataset.bw=(0.5+e.w*0.52).toFixed(1);
+  line.classList.add('el');
+  svg.appendChild(line);
+});
+
+edges.filter(e=>e.w>=8).forEach(e=>{
+  const sn=nodes.find(n=>n.id===e.s),tn=nodes.find(n=>n.id===e.t);
+  const mx=(sn.x+tn.x)/2,my=(sn.y+tn.y)/2;
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg.setAttribute('cx',mx);bg.setAttribute('cy',my);bg.setAttribute('r',8);
+  bg.setAttribute('fill','rgba(255,255,255,0.98)');
+  bg.setAttribute('stroke','rgba(15,23,42,0.45)');
+  bg.setAttribute('stroke-width','1');
+  bg.setAttribute('opacity','1');
+  const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('x',mx);t.setAttribute('y',my+3.5);
+  t.setAttribute('text-anchor','middle');t.setAttribute('fill','#0b1220');
+  t.setAttribute('font-size','10');t.setAttribute('font-family','JetBrains Mono,monospace');
+  t.setAttribute('font-weight','800');
+  t.textContent=e.w;
+  svg.appendChild(bg);svg.appendChild(t);
+});
+
+nodes.forEach(n=>{
+  const r=5+Math.sqrt(n.freq)*2.1;
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.style.cursor='pointer';
+
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',n.x);c.setAttribute('cy',n.y);c.setAttribute('r',r);
+  c.setAttribute('fill',n.color+'1e');c.setAttribute('stroke',n.color);c.setAttribute('stroke-width','1.5');
+
+  const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');
+  lbl.setAttribute('x',n.x);lbl.setAttribute('y',n.y-r-5);
+  lbl.setAttribute('text-anchor','middle');lbl.setAttribute('fill',n.color);
+  lbl.setAttribute('font-size','10');lbl.setAttribute('font-family','DM Sans,sans-serif');
+  lbl.setAttribute('font-weight','600');lbl.textContent=n.id;
+
+  const freq=document.createElementNS('http://www.w3.org/2000/svg','text');
+  freq.setAttribute('x',n.x);freq.setAttribute('y',n.y+4);
+  freq.setAttribute('text-anchor','middle');freq.setAttribute('fill','#ffffff');
+  freq.setAttribute('font-size','11');freq.setAttribute('font-family','JetBrains Mono,monospace');
+  freq.setAttribute('font-weight','800');
+  freq.setAttribute('stroke','rgba(15,23,42,0.85)');
+  freq.setAttribute('stroke-width','1.2');
+  freq.setAttribute('paint-order','stroke fill');
+  freq.textContent=n.freq;
+
+  g.appendChild(c);g.appendChild(lbl);g.appendChild(freq);
+
+  g.addEventListener('mouseenter',e=>{
+    c.setAttribute('fill',n.color+'44');c.setAttribute('stroke-width','2.5');
+    document.querySelectorAll('.el').forEach(el=>{
+      const active=el.dataset.s===n.id||el.dataset.t===n.id;
+      el.setAttribute('stroke-opacity',active?'0.92':'0.03');
+      el.setAttribute('stroke-width',active?parseFloat(el.dataset.bw)*1.8:el.dataset.bw);
+    });
+    showTip(e,`<strong style="color:${n.color}">${n.id}</strong><br>Frequency: ${n.freq} sentences`);
+  });
+  g.addEventListener('mouseleave',()=>{
+    c.setAttribute('fill',n.color+'1e');c.setAttribute('stroke-width','1.5');
+    document.querySelectorAll('.el').forEach(el=>{
+      el.setAttribute('stroke-opacity',el.dataset.bo);
+      el.setAttribute('stroke-width',el.dataset.bw);
+    });
+    hideTip();
+  });
+  svg.appendChild(g);
+});
+
+// ══ 5. BUBBLES ════════════════════════════════════════════════════
+const termData = [
+  {word:'AI',freq:184,color:'#18354F'},{word:'region',freq:79,color:'#D72830'},
+  {word:'workforce',freq:47,color:'#1F6B8F'},{word:'career',freq:39,color:'#1F6B8F'},
+  {word:'data',freq:32,color:'#18354F'},{word:'talent',freq:30,color:'#D72830'},
+  {word:'federal',freq:29,color:'#1F6B8F'},{word:'employers',freq:28,color:'#1F6B8F'},
+  {word:'skills',freq:25,color:'#1F6B8F'},{word:'education',freq:25,color:'#EBB043'},
+  {word:'growth',freq:21,color:'#D72830'},{word:'jobs',freq:21,color:'#1F6B8F'},
+  {word:'apprenticeship',freq:18,color:'#EBB043'},{word:'innovation',freq:14,color:'#EBB043'},
+];
+const bc=document.getElementById('bubbles');
+function renderBubbles() {
+  bc.innerHTML = '';
+  const placed = [];
+  const cw = bc.offsetWidth || 900;
+  const ch = bc.offsetHeight || 360;
+  const sizeScale = Math.max(0.62, Math.min(1.05, cw / 900));
+
+  termData.forEach(t=>{
+    const norm=(t.freq-14)/(184-14);
+    const size=(48+norm*84) * sizeScale;
+    const div=document.createElement('div');
+    div.className='bubble';
+    div.style.cssText=`width:${size}px;height:${size}px;background:${t.color}18;border:1.5px solid ${t.color}55;color:${t.color};font-size:${size*.19}px;`;
+    div.innerHTML=`<span class="b-word">${t.word}</span><span class="b-count" style="font-size:${size*.14}px">${t.freq}</span>`;
+    div.addEventListener('mouseenter',e=>showTip(e,`<strong style="color:${t.color}">${t.word}</strong><br>Frequency: ${t.freq} sentences`));
+    div.addEventListener('mouseleave',hideTip);
+
+    let x,y,tries=0;
+    do {
+      x=Math.random()*(cw-size-10)+5;
+      y=Math.random()*(ch-size-10)+5;
+      tries++;
+    } while(
+      tries<120 &&
+      placed.some(p=>Math.hypot((p.x+p.s/2)-(x+size/2),(p.y+p.s/2)-(y+size/2)) < (p.s/2+size/2+8))
+    );
+    placed.push({x,y,s:size});
+    div.style.left=x+'px';
+    div.style.top=y+'px';
+    bc.appendChild(div);
+  });
+}
+renderBubbles();
+
+// ══ 6. PAIN POINTS ═══════════════════════════════════════════════
+const indPain = [
+  {text:'Loss of federal credentials & certifications (300hr IDIQ, agency-specific)', color:'#18354F'},
+  {text:'Procurement bureaucracy  -  small projects require same paperwork as $M contracts', color:'#18354F'},
+  {text:'No access to affordable health or liability insurance', color:'#18354F'},
+  {text:'Professional identity loss  -  "who am I outside the federal system?"', color:'#EBB043'},
+  {text:'Difficulty marketing, pricing, and positioning services competitively', color:'#EBB043'},
+  {text:'High startup costs, complex tax requirements, limited networks', color:'#EBB043'},
+];
+const empPain = [
+  {text:'Inability to vet actual capabilities  -  "unknown quantity" of gig talent', color:'#D72830'},
+  {text:'Culture alignment risk  -  institutional memory loss from external talent', color:'#D72830'},
+  {text:'Legal/regulatory unknowns create "wait and see" hiring culture', color:'#94A3B8'},
+  {text:'No efficient recruiter network for gig roles  -  where to find quality talent?', color:'#94A3B8'},
+  {text:'Contract and procurement stipulations slow down engagement significantly', color:'#EBB043'},
+  {text:'Reputation risk when hiring unverified external expertise', color:'#EBB043'},
+];
+
+function renderPP(items, elId) {
+  const el = document.getElementById(elId);
+  items.forEach(item => {
+    el.innerHTML += `<div class="pp-item">
+      <div class="pp-dot" style="background:${item.color}"></div>
+      <div class="pp-text">${item.text}</div>
+    </div>`;
+  });
+}
+renderPP(indPain, 'individualPain');
+renderPP(empPain, 'employerPain');
+
+// ══ 7. SCROLL ANIMATIONS ══════════════════════════════════════════
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('on');
+    e.target.querySelectorAll('.bar-fill[data-pct]').forEach(b => {
+      setTimeout(()=>{ b.style.width = b.dataset.pct+'%'; }, 250);
+    });
+    e.target.querySelectorAll('.sector-fill[data-pct]').forEach(b => {
+      setTimeout(()=>{ b.style.width = b.dataset.pct+'%'; }, 350);
+    });
+    io.unobserve(e.target);
+  });
+}, {threshold: 0.07});
+
+document.querySelectorAll('.fi').forEach(el => io.observe(el));
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    buildTreemap();
+    renderBubbles();
+  }, 160);
+});
+</script>
+</body>
+</html>
+
+
