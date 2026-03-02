@@ -9,7 +9,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
   :root{
-    --frame-max:1182px;
+    --frame-max:100vx;
     /* ForwardDMV-inspired palette (derived from logo) */
     --navy:#18354F;
     --red:#D72830;
@@ -45,11 +45,11 @@
     overflow-x:hidden;
   }
   .embed-root{
-    position:relative;
-    z-index:1;
-    width:min(100%, var(--frame-max));
-    max-width:var(--frame-max);
-    margin:0 auto;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: none;
+    margin: 0;
   }
 
   /* Subtle page texture (lightweight, brand-safe) */
@@ -1177,5 +1177,6 @@ scheduleEmbedHeightPost();
 </script>
 </body>
 </html>
+
 
 
