@@ -9,6 +9,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
   :root{
+    --frame-max:1182px;
     /* ForwardDMV-inspired palette (derived from logo) */
     --navy:#18354F;
     --red:#D72830;
@@ -63,7 +64,8 @@
   /* HEADER */
   header{
     position:relative;z-index:1;
-    max-width:1200px;
+    width:min(100%, var(--frame-max));
+    max-width:var(--frame-max);
     margin:24px auto 0;
     padding:34px 24px 28px;
     border:1px solid var(--border);
@@ -78,7 +80,7 @@
     background:linear-gradient(90deg,var(--navy),var(--red),var(--gold));
   }
   .header-inner{
-    max-width:1200px;margin:0 auto;
+    max-width:var(--frame-max);margin:0 auto;
     display:grid;gap:14px;
   }
   .brand{
@@ -166,7 +168,8 @@
   /* LAYOUT */
   main{
     position:relative;z-index:1;
-    max-width:1200px;
+    width:min(100%, var(--frame-max));
+    max-width:var(--frame-max);
     margin:0 auto;
     padding:28px 24px 56px;
     display:grid;
@@ -370,6 +373,7 @@
 
   /* METRO RANKINGS */
   .metro-table{width:100%;border-collapse:collapse;font-size:clamp(13px,0.74rem + 0.24vw,15px);}
+  .metro-table td,.metro-table th{overflow-wrap:anywhere;}
   .metro-table th{
     font-family:'JetBrains Mono',monospace;
     font-size:clamp(10px,0.56rem + 0.2vw,12px);letter-spacing:clamp(1.2px,0.2vw,2px);color:var(--muted2);
@@ -510,6 +514,10 @@
     .q-card,.init-card,.pp-side,.ai-dim,.stat-box{padding:14px;}
     .paradox-box{padding:14px;}
     .vis-legend{gap:8px 10px;}
+  }
+  @media(max-width:390px){
+    .topic-row{grid-template-columns:minmax(98px,1fr) 1fr 40px;gap:8px;}
+    .sector-row{grid-template-columns:84px 1fr 30px;gap:6px;}
   }
 
 </style>
@@ -1134,13 +1142,30 @@ const io = new IntersectionObserver(entries => {
 document.querySelectorAll('.fi').forEach(el => io.observe(el));
 
 let resizeTimer;
+let embedHeightTimer;
+function postEmbedHeight() {
+  if (window.parent === window) return;
+  const h = Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight
+  );
+  window.parent.postMessage({ type: 'forwarddmv:height', height: h }, '*');
+}
+function scheduleEmbedHeightPost() {
+  clearTimeout(embedHeightTimer);
+  embedHeightTimer = setTimeout(postEmbedHeight, 120);
+}
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     buildTreemap();
     renderBubbles();
+    scheduleEmbedHeightPost();
   }, 160);
 });
+window.addEventListener('load', scheduleEmbedHeightPost);
+window.addEventListener('orientationchange', scheduleEmbedHeightPost);
+scheduleEmbedHeightPost();
 </script>
 </body>
 </html>
