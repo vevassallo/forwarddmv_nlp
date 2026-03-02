@@ -232,21 +232,32 @@
 
   /* STAT STRIP */
   .stats-strip{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(210px,240px));
+    display:flex;
+    flex-wrap:wrap;
     justify-content:center;
+    align-items:stretch;
     gap:18px;
     margin-bottom:10px;
   }
-  @media(max-width:900px){.stats-strip{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;}}
-  @media(max-width:520px){.stats-strip{grid-template-columns:1fr;gap:14px;}}
+  @media(max-width:900px){.stats-strip{gap:16px;}}
+  @media(max-width:520px){.stats-strip{gap:14px;}}
   .stat-box{
+    flex:1 1 220px;
+    max-width:240px;
+    min-width:190px;
     background:var(--surface);
     border:1px solid var(--border);
     border-radius:14px;
     padding:16px 14px;
     text-align:left;
     box-shadow:0 10px 22px rgba(15,23,42,.05);
+  }
+  @media(max-width:520px){
+    .stat-box{
+      flex:1 1 100%;
+      max-width:100%;
+      min-width:0;
+    }
   }
   .stat-num{font-family:'Montserrat',sans-serif;font-size:clamp(28px,1.34rem + 1.4vw,36px);letter-spacing:-0.6px;line-height:1;margin-bottom:6px;}
   .stat-lbl{font-size:clamp(10px,0.56rem + 0.2vw,12px);color:var(--muted2);letter-spacing:1px;text-transform:uppercase;font-weight:600;}
@@ -1177,6 +1188,5 @@ scheduleEmbedHeightPost();
 </script>
 </body>
 </html>
-
 
 
