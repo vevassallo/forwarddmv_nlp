@@ -44,13 +44,6 @@
     line-height:1.6;
     overflow-x:hidden;
   }
-  .embed-root{
-    position:relative;
-    z-index:1;
-    width:min(100%, var(--frame-max));
-    max-width:var(--frame-max);
-    margin:0 auto;
-  }
 
   /* Subtle page texture (lightweight, brand-safe) */
   body::after{
@@ -71,8 +64,8 @@
   /* HEADER */
   header{
     position:relative;z-index:1;
-    width:100%;
-    max-width:100%;
+    width:min(100%, var(--frame-max));
+    max-width:var(--frame-max);
     margin:24px auto 0;
     padding:34px 24px 28px;
     border:1px solid var(--border);
@@ -87,7 +80,7 @@
     background:linear-gradient(90deg,var(--navy),var(--red),var(--gold));
   }
   .header-inner{
-    max-width:100%;margin:0 auto;
+    max-width:var(--frame-max);margin:0 auto;
     display:grid;gap:14px;
   }
   .brand{
@@ -175,8 +168,8 @@
   /* LAYOUT */
   main{
     position:relative;z-index:1;
-    width:100%;
-    max-width:100%;
+    width:min(100%, var(--frame-max));
+    max-width:var(--frame-max);
     margin:0 auto;
     padding:28px 24px 56px;
     display:grid;
@@ -531,7 +524,6 @@
 </head>
 <body>
 <div id="tooltip"></div>
-<div id="embedRoot" class="embed-root">
 
 <!-- HEADER -->
 <header>
@@ -756,10 +748,9 @@
     <div class="cta-quote">DO WHAT YOU CAN<br>WITH WHAT YOU HAVE<br>WHERE YOU ARE</div>
     <div style="font-size:clamp(11px,0.64rem + 0.2vw,13px);color:var(--muted);max-width:520px;margin:0 auto 24px;line-height:1.7;"> -  Teddy Roosevelt, invoked as the operating philosophy for a region that possesses every asset it needs: the most educated workforce in the country, world-class institutions, and now  -  the urgency to act together.</div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(10px,0.56rem + 0.2vw,12px);color:var(--c1);">#ForwardDMV &nbsp;·&nbsp; forwarddmv.skipso.com</div>
-</div>
+  </div>
 
 </main>
-</div>
 
 <script>
 // ══ TOOLTIP HELPER ════════════════════════════════════
@@ -1154,9 +1145,10 @@ let resizeTimer;
 let embedHeightTimer;
 function postEmbedHeight() {
   if (window.parent === window) return;
-  const root = document.getElementById('embedRoot');
-  if (!root) return;
-  const h = Math.ceil(root.getBoundingClientRect().height);
+  const h = Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight
+  );
   window.parent.postMessage({ type: 'forwarddmv:height', height: h }, '*');
 }
 function scheduleEmbedHeightPost() {
@@ -1176,14 +1168,5 @@ window.addEventListener('orientationchange', scheduleEmbedHeightPost);
 scheduleEmbedHeightPost();
 </script>
 </body>
-
-<script>
-  function sendHeight() {
-    window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
-  }
-  window.addEventListener('load', sendHeight);
-  window.addEventListener('resize', sendHeight);
-  new ResizeObserver(sendHeight).observe(document.body);
-</script>
 </html>
 
